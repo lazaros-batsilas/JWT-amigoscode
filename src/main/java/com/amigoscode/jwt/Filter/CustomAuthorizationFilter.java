@@ -2,7 +2,6 @@ package com.amigoscode.jwt.Filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.amigoscode.jwt.Model.Role;
+import com.amigoscode.jwt.Utils.ErrorUtils;
 import com.amigoscode.jwt.Utils.JWTUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,9 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-
 public class CustomAuthorizationFilter extends OncePerRequestFilter{
 	private final JWTUtils jwtUtils;
+	private final ErrorUtils errorUtils;
 	private final UserDetailsService userDetailsService;
 
 	@Override
@@ -70,14 +69,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter{
 
 					
 				} catch (Exception exception){
-					log.error("Error authorizing user "+exception.getMessage());
-					response.addHeader("error", "Error authorizing user "+exception.getMessage());
-					response.setStatus(HttpStatus.FORBIDDEN.value());
-					//response.sendError(FORBIDDEN.value());
-					Map<String, String> error = new HashMap<String, String>();
-					error.put("error_message", exception.getMessage());
-					response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-					new ObjectMapper().writeValue(response.getOutputStream(), error);
+					errorUtils.writeErrorToBody(exception, response);
 				}
 
 			} else {

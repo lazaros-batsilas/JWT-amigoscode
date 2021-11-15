@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.amigoscode.jwt.Filter.CustomAuthenticationFilter;
 import com.amigoscode.jwt.Filter.CustomAuthorizationFilter;
-import com.amigoscode.jwt.Service.UserService;
+import com.amigoscode.jwt.Utils.ErrorUtils;
 import com.amigoscode.jwt.Utils.JWTUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserDetailsService userDetailsService;
 	private final BCryptPasswordEncoder bcryptPasswordEncoder;
 	private final JWTUtils jwtUtils;
+	private final ErrorUtils errorUtils;
 
 
 	@Override
@@ -48,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
 		http.authorizeRequests().anyRequest().authenticated();
 		http.addFilter(customAuthenticationFilter);
-		http.addFilterBefore(new CustomAuthorizationFilter(jwtUtils, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(new CustomAuthorizationFilter(jwtUtils, errorUtils, userDetailsService), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Bean
