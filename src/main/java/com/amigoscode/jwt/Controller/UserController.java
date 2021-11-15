@@ -55,7 +55,7 @@ public class UserController {
 		URI uri = URI.create(ServletUriComponentsBuilder
 				.fromCurrentContextPath()
 				.path("api/user/save").toUriString());
-		return ResponseEntity.created(uri).body(user);
+		return ResponseEntity.created(uri).body(userService.saveUser(user));
 	}
 	
 	
@@ -64,12 +64,12 @@ public class UserController {
 		URI uri = URI.create(ServletUriComponentsBuilder
 				.fromCurrentContextPath()
 				.path("/api/role/save").toUriString());
-		return ResponseEntity.created(uri).body(role);
+		return ResponseEntity.created(uri).body(userService.saveRole(role));
 	}
 	
 	@PostMapping("/role/addToUser")
 	ResponseEntity<AppUser> addRoleToUser(@RequestBody RoleUserForm form){
-		return ResponseEntity.ok().body(userService.addRoleToUser(form.getName(),form.getRole()));
+		return ResponseEntity.ok().body(userService.addRoleToUser(form.getUsername(),form.getRole()));
 	}
 	
 	@GetMapping("/token/refresh")
@@ -112,6 +112,6 @@ public class UserController {
 
 @Data
 class RoleUserForm{
-	private String name;
+	private String username;
 	private String role;
 }
