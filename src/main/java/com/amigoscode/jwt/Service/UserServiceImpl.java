@@ -62,6 +62,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return user;
 
 	}
+	
+	
 
 	@Override
 	public AppUser getUser(String username) {
@@ -73,6 +75,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public List<AppUser> getUsers() {
 		log.info("Fetching all users");
 		return userRepo.findAll();
+	}
+
+	@Override
+	public void deleteUser(AppUser user) {
+		userRepo.delete(user);
+		
+	}
+	
+	@Override
+	public void deleteRole(Long roleId) {
+		Role role = roleRepo.getById(roleId);
+		List roles = new ArrayList<Role>();
+		roles.add(role);
+		List<AppUser> affectedUsers = userRepo.findByRolesIn(roles);
+		affectedUsers.stream()
+					 .forEach(user->deleteUser(user));
+		roleRepo.delete(role);
+		
 	}
 
 
