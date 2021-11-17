@@ -15,5 +15,5 @@ public interface UserService {
 	void deleteUser(AppUser user);
 	void deleteRole(Long roleId);
 	void deleteRoleFromUser(String username, Long roleId);
-	
+	AppUser updateUser(String username, AppUser user);
 }

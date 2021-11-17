@@ -99,6 +99,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		AppUser user = userRepo.findByUsername(username);
 		user.getRoles().remove(role);
 	}
+
+	@Override
+	public AppUser updateUser(String username, AppUser newUser) {
+		AppUser user = userRepo.findByUsername(username);
+		if(newUser.getUsername()!=null) user.setUsername(newUser.getUsername());
+		if(newUser.getPassword()!=null) user.setPassword(newUser.getPassword());
+		if(newUser.getUser()!=null) user.setUser(newUser.getUser());
+		return user;
+	}
 	
 	
 
