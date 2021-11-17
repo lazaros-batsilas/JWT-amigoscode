@@ -84,6 +84,12 @@ public class UserController {
 		userService.deleteRole(roleId);
 	}
 	
+	@DeleteMapping("/user/{username}/role/{roleId}/delete")
+	void deleteRoleFromUser(@PathVariable("username") String username,
+							@PathVariable("roleId") Long roleId) {
+		userService.deleteRoleFromUser(username, roleId);		
+	}
+	
 	@GetMapping("/token/refresh")
 	void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		String authorizationHeader = request.getHeader("Authorization");

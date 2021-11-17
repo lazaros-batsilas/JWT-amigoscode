@@ -14,5 +14,6 @@ public interface UserService {
 	List<AppUser> getUsers();
 	void deleteUser(AppUser user);
 	void deleteRole(Long roleId);
+	void deleteRoleFromUser(String username, Long roleId);
 	
 }

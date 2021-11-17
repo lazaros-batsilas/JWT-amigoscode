@@ -93,4 +93,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 					
 	}
 
+	@Override
+	public void deleteRoleFromUser(String username, Long roleId) {
+		Role role = roleRepo.getById(roleId);
+		AppUser user = userRepo.findByUsername(username);
+		user.getRoles().remove(role);
+	}
+	
+	
+
 }
