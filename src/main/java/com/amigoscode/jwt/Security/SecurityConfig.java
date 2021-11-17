@@ -2,9 +2,13 @@ package com.amigoscode.jwt.Security;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpMethod.DELETE;
+
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,8 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
-		http.authorizeRequests().antMatchers(GET, "/api/users/**").hasAnyAuthority("ROLE_USER");
-		http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
+		http.authorizeRequests().antMatchers(GET, "/api/users/**").hasAnyAuthority("ROLE_USER", "ROLE_MANAGER", "ROLE_ADMIN", "ROLE_SUPER_ADMIN");
+		http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority("ROLE_MANAGER", "ROLE_ADMIN", "ROLE_SUPER_ADMIN");
+		http.authorizeRequests().antMatchers(PUT, "/api/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN");
+		http.authorizeRequests().antMatchers(DELETE, "/api/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
 		http.authorizeRequests().anyRequest().authenticated();
 		http.addFilter(customAuthenticationFilter);
 		http.addFilterBefore(new CustomAuthorizationFilter(jwtUtils, errorUtils, userDetailsService), UsernamePasswordAuthenticationFilter.class);
