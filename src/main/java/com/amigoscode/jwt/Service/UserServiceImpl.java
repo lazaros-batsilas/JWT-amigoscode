@@ -1,6 +1,7 @@
 package com.amigoscode.jwt.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -86,15 +87,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public void deleteRole(Long roleId) {
 		Role role = roleRepo.getById(roleId);
-		List roles = new ArrayList<Role>();
-		roles.add(role);
-		List<AppUser> affectedUsers = userRepo.findByRolesIn(roles);
-		affectedUsers.stream()
-					 .forEach(user->deleteUser(user));
-		roleRepo.delete(role);
 		
+//		List<AppUser> affectedUsers = userRepo.findByRolesIn(Arrays.asList(role));
+		userRepo.findAll().stream()
+					 .forEach(user->user.getRoles().remove(role));
+//		for(AppUser user:affectedUsers) {
+//			user.getRoles().remove(role);
+//		}
+		roleRepo.delete(role);
+					
 	}
-
-
 
 }
