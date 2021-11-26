@@ -22,7 +22,7 @@ public class SpringJwtApplication {
 	}
 	
 	@Bean
-	BCryptPasswordEncoder passwordEncoder() {
+	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(10);
 	}
 	
